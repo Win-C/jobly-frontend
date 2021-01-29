@@ -1,9 +1,0 @@
-If userInputs changes,
-    then signup => token
-    or login => token
-    or update profile => partial new user info; previous token is still valid
-
-    then use token
-    get (updated) user data
-
-

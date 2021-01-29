@@ -185,6 +185,7 @@ function App() {
 
   if (isLoading) return <i>Loading...</i>;
 
+  // TODO: Flash error message and handle redirect
   const showErrorMessage = error
     ? <Alert error={error} />
     : null;
