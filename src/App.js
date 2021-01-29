@@ -24,7 +24,7 @@ import Alert from "./Alert";
  *  - userCredentials: object with user's username and JWT token for authorization
  *      { username, token }
  *  - newJob: string of job id to add to user's applications
- *  - error: array of error messages
+ *  - error: array of error messages to be shown to user
  *  - isLoading: Boolean value w/ default of true
  *  - isSigningUp: Boolean value w/ default of false
  *  - isUpdatingUser: Boolean value w/ default of falsee
@@ -34,14 +34,16 @@ import Alert from "./Alert";
 function App() {
   const [userAccount, setUserAccount] = useState(null);
   const [currUser, setCurrUser] = useState({});
-  const [userCredentials, setUserCredentials] = useState(null);
+  const [userCredentials, setUserCredentials] = useState(
+    JSON.parse(localStorage.getItem("userCredentials")) || null);
   const [newJob, setNewJob] = useState(null);
   const [error, setError] = useState(null);
+  const [isSuccess, setIsSuccess] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [isUpdatingUser, setIsUpdatingUser] = useState(false);
-  JoblyApi.token = userCredentials ? userCredentials.token : null;
 
+  JoblyApi.token = userCredentials ? userCredentials.token : null;
 
   /** Get JWT token for either new user upon sign up or 
    *  for returning user on log in 
@@ -54,11 +56,13 @@ function App() {
           const resp = await JoblyApi.signupUser(currUser);
           const newCredentials = { username: currUser.username, token: resp };
           setUserCredentials(newCredentials);
+          setIsSuccess(true);
         }
         if (numFields === 2) {
           const resp = await JoblyApi.loginUser(currUser);
           const newCredentials = { username: currUser.username, token: resp };
           setUserCredentials(newCredentials);
+          setIsSuccess(true);
         }
       } catch (err) {
         setError(err);
@@ -66,6 +70,8 @@ function App() {
     }
     fetchToken();
   }, [currUser, isSigningUp]);
+
+  if(isSuccess) localStorage.setItem("userCredentials", JSON.stringify(userCredentials));
 
   /** Get user's account info from the backend that's an object like:
    *  { username, firstName, lastName, isAdmin, applications }
