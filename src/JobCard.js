@@ -21,7 +21,7 @@ function JobCard({ job, isApplied, applyToJob }) {
   const history = useHistory();
 
   /** updates user's list of applied jobs */
-  function handleClick(evt) {
+  function handleClick() {
     applyToJob(job.id);
     history.push("/jobs");
   }

@@ -132,7 +132,7 @@ class JoblyApi {
    * Authorization required: admin or same-user-as-:username
    **/
 
-  static async updateUser(username, data) {
+  static async updateUser({ username, ...data}) {
     let res = await this.request(
       `users/${username}`,
       data,
