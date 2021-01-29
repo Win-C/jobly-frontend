@@ -1,12 +1,15 @@
-/** Renders Alert
+/** Renders Alert component
+ * 
+ *  Props:
+ *  - error message
  * 
  *  { LoginForm, SignupForm, ProfileForm } -> Alert
  */
-function Alert() {
+function Alert({ error }) {
 
   return (
     <div className="Alert">
-      <p>Alert</p>
+      <p><b>Alert!</b> {error}</p>
     </div>
   );
 }

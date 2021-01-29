@@ -21,7 +21,7 @@ import ProfileForm from "./ProfileForm";
  *                      LoginForm, SignupForm, ProfileForm }
 */
 function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
-  
+
   // Create userJobs an array of job ids for applications submitted by the user
   const userJobs = user
     ? user.applications
@@ -47,7 +47,7 @@ function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
   return (
     <Switch>
       <Route exact path="/">
-        <Homepage />
+        <Homepage user={user}/>
       </Route>
       <Route exact path="/companies">
         {showCompanies}

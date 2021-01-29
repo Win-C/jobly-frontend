@@ -8,6 +8,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import NavBar from "./NavBar";
 import Routes from "./Routes";
+import Alert from "./Alert";
 
 /** Renders Jobly App
  *  
@@ -29,9 +30,7 @@ import Routes from "./Routes";
 function App() {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
-  const [error, setError] = useState([]);
-
-  console.log("rendering user = ", user);
+  const [error, setError] = useState(false);
 
   JoblyApi.token = token;
 
@@ -102,11 +101,13 @@ function App() {
     }
   }
 
-  // TODO: Show error messages to user
-  if (error) console.log(error);
+  const showErrorMessage = error
+    ? <Alert error={error} />
+    : null;
 
   return (
     <div className="App">
+      {showErrorMessage}
       <BrowserRouter>
         <NavBar user={user}
           logoutUser={logoutUser}
