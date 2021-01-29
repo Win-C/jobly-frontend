@@ -30,19 +30,19 @@ function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
   // TODO: Refactor
   const showCompanies = user
     ? <CompanyList />
-    : null;
+    : <Redirect to="/" />;
 
   const showCompany = user
     ? <CompanyDetail userJobs={userJobs} applyToJob={applyToJob} />
-    : null;
+    : <Redirect to="/" />;
 
   const showJobs = user
     ? <JobList userJobs={userJobs} applyToJob={applyToJob} />
-    : null;
+    : <Redirect to="/" />;
 
   const showProfile = user
     ? <ProfileForm updateUser={updateUser} user={user} />
-    : null;
+    : <Redirect to="/" />;
   
   return (
     <Switch>

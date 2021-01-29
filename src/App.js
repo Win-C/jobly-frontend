@@ -35,7 +35,7 @@ function App() {
   const [userAccount, setUserAccount] = useState(null);
   const [currUser, setCurrUser] = useState({});
   const [userCredentials, setUserCredentials] = useState(
-    JSON.parse(localStorage.getItem("userCredentials")) || null);
+    JSON.parse(localStorage.getItem("userCredentials")) || null); // Check if user exists in localStorage
   const [newJob, setNewJob] = useState(null);
   const [error, setError] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -71,6 +71,7 @@ function App() {
     fetchToken();
   }, [currUser, isSigningUp]);
 
+  // If successful signup or login then add to localStorage
   if(isSuccess) localStorage.setItem("userCredentials", JSON.stringify(userCredentials));
 
   /** Get user's account info from the backend that's an object like:
@@ -158,6 +159,7 @@ function App() {
     setIsSigningUp(false)
     setIsUpdatingUser(false)
     setError(null);
+    localStorage.setItem("userCredentials", null);
     setIsLoading(true);
   }
 
