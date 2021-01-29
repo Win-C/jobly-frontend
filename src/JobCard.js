@@ -1,3 +1,5 @@
+import { useHistory } from "react-router-dom";
+
 import "./JobCard.css";
 
 /** Renders JobCard component
@@ -16,16 +18,17 @@ import "./JobCard.css";
  */
 
 function JobCard({ job, isApplied, applyToJob }) {
-  
+  const history = useHistory();
+
   /** updates user's list of applied jobs */
   function handleClick(evt) {
     applyToJob(job.id);
+    history.push("/jobs");
   }
 
-  const showButton = ((!isApplied)
+  const showButton = (!isApplied)
     ? <button className="btn btn-danger mb-3 ml-3" onClick={handleClick}>APPLY</button>
-    : <button className="btn btn-danger disabled mb-3 ml-3">APPLIED</button>
-  );
+    : <button className="btn btn-danger disabled mb-3 ml-3">APPLIED</button>;
 
   const showCompanyName = job.companyHandle
     ? <p className="ml-3">

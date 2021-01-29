@@ -36,24 +36,25 @@ function SignupForm({ signupUser }) {
   return (
     <form className="SignupForm mx-auto col-6" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="SignupForm-username">Username</label>
         <input
+          id="SignupForm-username"
           name="username"
           className="form-control"
           onChange={handleChange}
         />
 
-        <label htmlFor="password">Password</label>
+        <label htmlFor="SignupForm-password">Password</label>
         <input
+          id="SignupForm-password"
           type="password"
           name="password"
           className="form-control"
           onChange={handleChange}
         />
-        {/* TODO: fix htmlFor naming in all forms */}
-        <label htmlFor="signUpForm-firsName">First Name</label>
+        <label htmlFor="SignUpForm-firstName">First Name</label>
         <input
-          id="signUpForm-firsName"
+          id="SignUpForm-firstName"
           name="firstName"
           className="form-control"
           onChange={handleChange}
@@ -61,6 +62,7 @@ function SignupForm({ signupUser }) {
 
         <label htmlFor="lastName">Last Name</label>
         <input
+          id="SignUpForm-lastName"
           name="lastName"
           className="form-control"
           onChange={handleChange}
@@ -68,6 +70,7 @@ function SignupForm({ signupUser }) {
 
         <label htmlFor="email">Email</label>
         <input
+          id="SignUpForm-email"
           name="email"
           className="form-control"
           onChange={handleChange}

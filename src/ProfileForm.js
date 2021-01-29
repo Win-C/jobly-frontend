@@ -14,11 +14,13 @@ import { useHistory } from "react-router-dom";
  *  
  * */
 function ProfileForm({ updateUser, user }) {
-  const initialState = user;
-  const [formData, setFormData] = useState(initialState);
+  const initialFormData = {
+    firstName: user.firstName,
+    lastName: user.lastName,
+    email: user.email
+  };
+  const [formData, setFormData] = useState(initialFormData);
   const history = useHistory();
-
-  // console.log('profile form user = ', user);
 
   /** updates formData on change of input */
   function handleChange(evt) {
@@ -32,7 +34,7 @@ function ProfileForm({ updateUser, user }) {
   function handleSubmit(evt) {
     evt.preventDefault();
     updateUser(formData);
-    setFormData(initialState);
+    setFormData(initialFormData);
     history.push("/");
   }
 
@@ -42,33 +44,41 @@ function ProfileForm({ updateUser, user }) {
         <label htmlFor="username"><b>Username</b></label>
         <p>{user.username}</p>
 
-        <label htmlFor="firstName">First Name</label>
+        <label htmlFor="ProfileForm-firstName">First Name</label>
         <input
-          value={user.firstName}
+          id="ProfileForm-firstName"
           name="firstName"
           className="form-control"
           onChange={handleChange}
+          value={formData.firstName}
+          aria-label="firstName"
         />
-        <label htmlFor="lastName">Last Name</label>
+        <label htmlFor="ProfileForm-lastName">Last Name</label>
         <input
-          value={user.lastName}
+          id="ProfileForm-lastName"
           name="lastName"
           className="form-control"
           onChange={handleChange}
+          value={formData.lastName}
+          aria-label="lastName"
         />
-        <label htmlFor="email">Email</label>
+        <label htmlFor="ProfileForm-email">Email</label>
         <input
-          value={user.email}
+          id="ProfileForm-email"
           name="email"
           className="form-control"
           onChange={handleChange}
+          value={formData.email}
+          aria-label="email"
         />
-        <label htmlFor="password">Confirm password to save changes:</label>
+        <label htmlFor="ProfileForm-password">Confirm password to save changes:</label>
         <input
-          type="password"
+          id="ProfileForm-password"
           name="password"
           className="form-control"
           onChange={handleChange}
+          aria-label="password"
+          type="password"
         />
       </div>
       <div>

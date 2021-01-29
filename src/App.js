@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import JoblyApi from "./api";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import NavBar from "./NavBar";
@@ -21,146 +21,89 @@ import Routes from "./Routes";
  *      } 
  *    where applications is array of job ids like:
  *      [ id, etc. ]
- *  - userInputs: object like 
- *      if signing up, { username, password, firstName, lastName, email}
- *      if logging in, { username, password }
- *      if updating user, { firstName, lastName, email, password } 
  *  - token: string of JWT token for user
  *  - error: array of error messages
- *  - isSigningUp: Boolean, true if user is signing up
- *  - isLoggingIn: Boolean, true if user is logging in
- *  - isUpdating: Boolean, true if user is updating
  * 
  *  App -> { NavBar, Routes }
  */
 function App() {
-  // NOTE: Question about number of states?
-  const [user, setUser] = useState({});
-  const [userInputs, setUserInputs] = useState({});
-  // const [appliedJob, setAppliedJob] = useState({});
+  const [user, setUser] = useState(null);
   const [token, setToken] = useState("");
   const [error, setError] = useState([]);
-  const [isSigningUp, setIsSigningUp] = useState(false);
-  const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
-  // const [isApplying, setIsApplying] = useState(false);
-  // const [isSuccess, setIsSuccess] = useState(false);
+
+  console.log("rendering user = ", user);
+
   JoblyApi.token = token;
 
-  /** Sign up user by using provided userData like
+  /** Get JWT token with user's username
+   *  */
+  async function getUser(username){
+    try {
+      const currUser = await JoblyApi.getUser(username);
+      setUser(currUser);
+    } catch (err) {
+      setError(err);
+    }
+  }
+
+  /** Sign up new user where user input is an object like
    *  { username, password, firstName, lastName, email } 
    *  */
-  function signupUser(userInputs) {
-    setUserInputs(userInputs);
-    setIsSigningUp(true);
+  async function signupUser(user) {
+    try {
+      const resp = await JoblyApi.signupUser(user);
+      setToken(resp);
+      await getUser(user.username);
+    } catch (err) {
+      setError(err);
+    }
   }
 
-  /** Login user by using provided userData like 
+  /** Login user by using provided user is an object like 
    *  { username, password }
    * */
-  function loginUser(userInputs) {
-    setUserInputs(userInputs);
-    setIsLoggingIn(true);
+  async function loginUser(user) {
+    try {
+      const resp = await JoblyApi.loginUser(user);
+      setToken(resp);
+      await getUser(user.username);
+    } catch (err) {
+      setError(err);
+    }
   }
 
-  /** TODO: Update user by using provided userData like
+  /** Update user by using provided userUpdates which is an object like
    *  { firstName, lastName, password, email }
    *  */
-  function updateUser(userInputs) {
-    // setUserInputs(userInputs);
-    // setIsUpdating(true);
+  async function updateUser(userUpdates) {
+    try {
+      await JoblyApi.updateUser(user.username, userUpdates);
+      const updatedUser = await getUser(user.username);
+      setUser(updatedUser);
+    } catch (err){
+      setError(err);
+    }
   }
 
   /** Logout user by returning user to initialState */
   function logoutUser() {
-    setUser({});
-    setUserInputs({});
+    setUser(null);
     setToken("")
-    // setIsSuccess(false);
   }
 
-  /** TODO: Adds job applied to user */
-  function applyToJob(jobId) {
-    console.log("applied to ", jobId);
-    // setAppliedJob(jobId);
-    // setIsApplying(true);
+  /** Adds job id to applications for user */
+  async function applyToJob(jobId) {
+    try {
+      await JoblyApi.applyToJob(user.username, jobId);
+      const updatedUser = await getUser(user.username);
+      setUser(updatedUser);
+    } catch (err) {
+      setError(err);
+    }
   }
-
-  /** Get a token for login, register, or updated profile of user with userinnputs */
-  useEffect(function fetchTokenOnRender() {
-    async function fetchToken() {
-      try {
-        if (isSigningUp === true) {
-          let resp = await JoblyApi.signupUser(userInputs);
-          // TODO: consider naming here for resp
-          resp = resp.token;
-          setToken(resp);
-          // setIsSuccess(true);
-        }
-        if (isLoggingIn === true) {
-          let resp = await JoblyApi.loginUser(userInputs);
-          resp = resp.token;
-          setToken(resp);
-          // setIsSuccess(true);
-        }
-      } catch (err) {
-        setError(err);
-      }
-      setIsSigningUp(false);
-      setIsLoggingIn(false);
-    }
-    // TODO: move states to dependencies 
-    fetchToken();
-  }, [userInputs]);
-
-/** get user information for current username */
-  // TODO: fix naming here too
-  useEffect(function fetchUserOnRender() {
-    async function fetchUser() {
-      try {
-        if ((isUpdating === false) && (token.length !== 0)) {
-          const newUser = await JoblyApi.getUser(userInputs.username);
-          setUser(newUser.user);
-        }
-      } catch (err) {
-        setError(err);
-      }
-    }
-    fetchUser();
-  }, [token, isUpdating, userInputs.username]);
-
-  /** update user when profile form is submitted  */
-  // useEffect(function fetchUserOnProfileUpdate() {
-  //   async function fetchUserProfileUpdate() {
-  //     try {
-  //       await JoblyApi.updateUser(userInputs);
-  //     } catch (err){
-  //       setError(err);
-  //     }
-  //     setIsUpdating(false);
-  //   }
-  //   fetchUserProfileUpdate();
-  // }, [userInputs]);
-
-  /** apply to job if user clicks on "apply" button */
-  // useEffect(function applyToJobOnClick() {
-  //   async function applyToJob() {
-  //     let resp;
-  //     try {
-  //       resp = await JoblyApi.applyToJob(user.username, appliedJob);
-  //     } catch (err) {
-  //       setError(err);
-  //     }
-  //   }
-  //   fetchUpdatedUser();
-  // }, [isApplying]);
-
 
   // TODO: Show error messages to user
   if (error) console.log(error);
-
-  // TODO: Incorporate a message for successful login or register of user
-  // if (isSuccess)
 
   return (
     <div className="App">

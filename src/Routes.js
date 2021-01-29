@@ -21,26 +21,42 @@ import ProfileForm from "./ProfileForm";
  *                      LoginForm, SignupForm, ProfileForm }
 */
 function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
-
-  // Grab job ids that user has applied to 
-  const userJobs = (Object.keys(user).length !== 0)
+  
+  // Create userJobs an array of job ids for applications submitted by the user
+  const userJobs = user
     ? user.applications
-    : [];
+    : null;
 
+  // TODO: Refactor
+  const showCompanies = user
+    ? <CompanyList />
+    : null;
+
+  const showCompany = user
+    ? <CompanyDetail userJobs={userJobs} applyToJob={applyToJob} />
+    : null;
+
+  const showJobs = user
+    ? <JobList userJobs={userJobs} applyToJob={applyToJob} />
+    : null;
+
+  const showProfile = user
+    ? <ProfileForm updateUser={updateUser} user={user} />
+    : null;
+  
   return (
     <Switch>
       <Route exact path="/">
         <Homepage />
       </Route>
       <Route exact path="/companies">
-        <CompanyList />
+        {showCompanies}
       </Route>
       <Route exact path="/companies/:handle">
-        {/* TODO: add ternary security here */}
-        <CompanyDetail userJobs={userJobs} applyToJob={applyToJob} />
+        {showCompany}
       </Route>
       <Route exact path="/jobs">
-        <JobList userJobs={userJobs} applyToJob={applyToJob} />
+        {showJobs}
       </Route>
       <Route exact path="/login">
         <LoginForm loginUser={loginUser} />
@@ -49,7 +65,7 @@ function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
         <SignupForm signupUser={signupUser} />
       </Route>
       <Route exact path="/profile">
-        <ProfileForm updateUser={updateUser} user={user} />
+        {showProfile}
       </Route>
       {/* 404 handler */}
       <Redirect to="/" />

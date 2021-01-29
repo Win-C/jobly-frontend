@@ -36,7 +36,7 @@ function SearchForm({ updateSearch }) {
     <form className="ProfileForm mx-auto" onSubmit={handleSubmit}>
       <div className="form-group input-group col-10 col-sm-8 col-md-6  mx-auto mt-5">
         <input
-          placeholder="Enter search term.."
+          placeholder="Enter search term..."
           name="queryString"
           className="form-control"
           onChange={handleChange}

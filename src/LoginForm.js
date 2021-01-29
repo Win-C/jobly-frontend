@@ -38,14 +38,16 @@ function LoginForm({ loginUser }) {
   return (
     <form className="LoginForm mx-auto col-6" onSubmit={handleSubmit}>
       <div className="form-group">
-        <label htmlFor="username">Username</label>
+        <label htmlFor="LoginForm-username">Username</label>
         <input
+          id="LoginForm-username"
           name="username"
           className="form-control"
           onChange={handleChange}
         />
         <label htmlFor="password">Password</label>
         <input
+          id="LoginForm-password"
           type="password"
           name="password"
           className="form-control"

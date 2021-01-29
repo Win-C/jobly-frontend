@@ -19,7 +19,7 @@ function NavBar({ user, logoutUser }) {
   }
 
   const navbar =
-    Object.keys(user).length !== 0 ? (
+    user ? (
       <div className="container">
         <NavLink exact to="/" className="navbar-brand font-weight-bold">
           Jobly
