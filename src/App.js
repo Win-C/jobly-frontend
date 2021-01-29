@@ -3,7 +3,7 @@ import "bootstrap/dist/css/bootstrap.css";
 
 import JoblyApi from "./api";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import NavBar from "./NavBar";
@@ -13,89 +13,115 @@ import Alert from "./Alert";
 /** Renders Jobly App
  *  
  *  state:
- *  - user: object like -
- *      { username, 
- *        firstName, 
- *        lastName, 
- *        isAdmin, 
- *        applications
- *      } 
+ *  - userAccount: user's account information from backend, an object like -
+ *      { username, firstName, lastName, isAdmin, applications } 
  *    where applications is array of job ids like:
  *      [ id, etc. ]
- *  - token: string of JWT token for user
+ *  - currUser: object of current user inputs:
+ *      if signing up, like { username, password, firstName, lastName, email } 
+ *      if logging in, like { username, password } 
+ *  - userCredentials: object with user's username and JWT token for authorization
+ *      { username, token }
  *  - error: array of error messages
+ *  - isLoading: Boolean value w/ default of true
  * 
  *  App -> { NavBar, Routes }
  */
 function App() {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState("");
-  const [error, setError] = useState(false);
+  const [userAccount, setUserAccount] = useState(null);
+  const [currUser, setCurrUser] = useState({});
+  const [userCredentials, setUserCredentials] = useState(null);
+  const [error, setError] = useState(null);
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [isUpdatingUser, setIsUpdatingUser] = useState(false);
+  JoblyApi.token = userCredentials ? userCredentials.token : null;
 
-  JoblyApi.token = token;
 
-  /** Get JWT token with user's username
-   *  */
-  async function getUser(username){
-    try {
-      const currUser = await JoblyApi.getUser(username);
-      setUser(currUser);
-    } catch (err) {
-      setError(err);
+  /** Get JWT token for either new user upon sign up or for returning user on log in */
+  useEffect(function fetchTokenForCurrentUser() {
+    async function fetchToken() {
+      const numFields = Object.keys(currUser).length;
+      try {
+        if (numFields === 5) {
+          const resp = await JoblyApi.signupUser(currUser);
+          const newCredentials = { username: currUser.username, token: resp };
+          setUserCredentials(newCredentials);
+        }
+        if (numFields === 2) {
+          const resp = await JoblyApi.loginUser(currUser);
+          const newCredentials = { username: currUser.username, token: resp };
+          setUserCredentials(newCredentials);
+        }
+      } catch (err) {
+        setError(err);
+      }
     }
-  }
+    fetchToken();
+  }, [currUser]);
 
-  /** Sign up new user where user input is an object like
+  /** Get user's account info from the backend that's an object like:
+   *  { username, firstName, lastName, isAdmin, applications }
+   *   where applications is [ id, ... ]
+   */
+  useEffect(function fetchUserAccountOnNewCredentials() {
+    async function fetchUserAccount() {
+      try {
+        if (userCredentials) {
+          const resp = await JoblyApi.getUser(userCredentials.username);
+          setUserAccount(resp);
+        }
+      } catch (err) {
+        setError(err);
+      }
+    }
+    fetchUserAccount();
+  }, [userCredentials]);
+
+  /** Sign up new user with current user inputs with number of fields = 5:
    *  { username, password, firstName, lastName, email } 
    *  */
-  async function signupUser(user) {
-    try {
-      const resp = await JoblyApi.signupUser(user);
-      setToken(resp);
-      await getUser(user.username);
-    } catch (err) {
-      setError(err);
-    }
+  function signupUser(currUser) {
+    setCurrUser(currUser);
   }
 
-  /** Login user by using provided user is an object like 
+  /** Login user with current user inputs with number of fields = 2:
    *  { username, password }
    * */
-  async function loginUser(user) {
-    try {
-      const resp = await JoblyApi.loginUser(user);
-      setToken(resp);
-      await getUser(user.username);
-    } catch (err) {
-      setError(err);
-    }
+  function loginUser(currUser) {
+    setCurrUser(currUser);
+  }
+  
+  /** Logout user by returning states to initial states */
+  function logoutUser() {
+    setUserAccount(null);
+    setCurrUser({});
+    setUserCredentials(null);
+    setError(null);
   }
 
-  /** Update user by using provided userUpdates which is an object like
+  /** Update user by using user's updates which is an object like
    *  { firstName, lastName, password, email }
    *  */
   async function updateUser(userUpdates) {
     try {
-      await JoblyApi.updateUser(user.username, userUpdates);
-      const updatedUser = await getUser(user.username);
-      setUser(updatedUser);
-    } catch (err){
+      await JoblyApi.updateUser(userAccount.username, userUpdates);
+      setUserCredentials((oldCredentials) => ({
+        ...oldCredentials,
+        username: userAccount.username
+      }));
+    } catch (err) {
       setError(err);
     }
-  }
-
-  /** Logout user by returning user to initialState */
-  function logoutUser() {
-    setUser(null);
-    setToken("")
   }
 
   /** Adds job id to applications for user */
   async function applyToJob(jobId) {
     try {
-      await JoblyApi.applyToJob(user.username, jobId);
-      const updatedUser = await getUser(user.username);
-      setUser(updatedUser);
+      await JoblyApi.applyToJob(userAccount.username, jobId);
+      setUserCredentials((oldCredentials) => ({
+        ...oldCredentials,
+        username: userAccount.username
+      }));
     } catch (err) {
       setError(err);
     }
@@ -109,11 +135,11 @@ function App() {
     <div className="App">
       {showErrorMessage}
       <BrowserRouter>
-        <NavBar user={user}
+        <NavBar user={userAccount}
           logoutUser={logoutUser}
         />
         <Routes
-          user={user}
+          user={userAccount}
           signupUser={signupUser}
           loginUser={loginUser}
           updateUser={updateUser}

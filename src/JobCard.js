@@ -37,7 +37,7 @@ function JobCard({ job, isApplied, applyToJob }) {
     : null;
 
   return (
-    <div className="JobCard border border-danger mx-auto mt-3">
+    <div className="JobCard border border-primary mx-auto mt-3">
       <p className="jobTitle ml-3 mt-3 font-weight-bold">{job.title}</p>
       {showCompanyName}
       <p className="jobTitle ml-3">Salary: {job.salary}</p>
