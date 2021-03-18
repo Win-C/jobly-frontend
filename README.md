@@ -8,16 +8,9 @@ Note: the following documentation focuses on the frontend. For backend related d
 
 ## Screenshots
 
+**React Component Hierarchy**
 
-
-**Database Entity Relationships**
-
-<img src="/static/images/database-er-diagram.png" width="750" height="250">
-
-- Note: The applications tables is a join table and has two foreign keys as a primary key. 
-- Key relationships:
-    - Each user may have many applications (one-to-many) but each job only has one application for each user (one-to-one)
-    - Each company may have many jobs (one-to-many)
+<img src="/static/images/jobly-react-component-hierarchy.png" width="600" height="500">
 
 ## Current features
 - RESTful routing
