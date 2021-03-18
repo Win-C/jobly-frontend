@@ -22,16 +22,20 @@ TODO: TBU
 <img src="/static/images/jobly-react-component-hierarchy.png" width="700" height="400">
 
 ## Current features
-- Navigation routes:
-    - "/" - Homepage with a simple welcome message
+- Users can log in, sign up and log out (authentication and registration is handled by the backend routes)
+- User navigation routes include:
+    - "/" - Homepage with a simple welcome message for that user
     - "/companies" - List of all companies with search filtering capabilities
     - "/companies/apple" - View details of this company
     - "/jobs" - List of all jobs
     - "/login" - login/signup
     - "/signup" - signup form
-    - "/profile" - edit profile page 
+    - "/profile" - edit profile page
+- Protected routes exist so a user needs to be logged in to access companies page, jobs page, and company details page
 
 ## Upcoming features
+- Logged-in user can edit their profile
+- Logged-in user can apply for jobs (using the backend endpoint for this)
 - Testing with AJAX using React Testing Library
 - Nav Link formatting
 - Pagination
