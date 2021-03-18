@@ -1,70 +1,114 @@
-# Getting Started with Create React App
+# Jobly
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Jobly is a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
 
-## Available Scripts
+Check out the deployed frontend <a href="http://hilarious-cobweb.surge.sh">here</a>.
 
-In the project directory, you can run:
+Note: the following documentation focuses on the frontend. For backend related documentation and commentary, please go <a href="">here</a>.
 
-### `npm start`
+## Screenshots
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+**Database Entity Relationships**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+<img src="/static/images/database-er-diagram.png" width="750" height="250">
 
-### `npm run build`
+- Note: The applications tables is a join table and has two foreign keys as a primary key. 
+- Key relationships:
+    - Each user may have many applications (one-to-many) but each job only has one application for each user (one-to-one)
+    - Each company may have many jobs (one-to-many)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Current features
+- RESTful routing
+- Users can view list of companies with the option of filtering by company name and # of employees
+- Logged in admin users can create, update, and delete companies
+- Logged in admin users can also create users but registration is open to everyone
+- Logged in admin users can also get the list of all users
+- Getting information on a user, updating, or deleting a user is only permitted by either an admin, or by that user
+- Logged in users can view jobs with similar backend RESTful routing as companies
+- Optional filtering of job postings by title, salary and equity
+- Ability for users to submit job applications
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Upcoming features
+- 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Tech stack
+- PostgreSQL for database
+- Express / JavaScript for backend
+- Create-React-App/React for frontend
 
-### `npm run eject`
+## Dependencies
+**Backend dependencies** include:
+- bcrypt
+- body-parser
+- colors
+- cors
+- dotenv
+- express
+- jest
+- jsonschema
+- jsonwebtoken
+- morgan
+- pg
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Note: See package.json file for full list and associated package versions.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Frontend dependencies** include:
+- axios for requests
+- bootstrap for styling
+- jest *(ships with CRA)*
+- jsonwebtoken for security
+- react-router-dom for routing
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Installation
+**Frontend Development Setup**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+**Coverage Report**:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+## Deployment
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+Before deploying ensure that your package.json is up to date.
 
-### Analyzing the Bundle Size
+We used Heroku to deploy our app so we created a Procfile in the root directory of our application. Make sure the filename does not have any extension and begins with capital P:
+```console
+echo "web: node server.js" > Procfile
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Login to your heroku account and create an application, making sure you have a correct remote. Push your code to the new remote and make sure you have a worker:
+```console
+heroku login
+heroku create NAME_OF_APP
+git remote -v
+git push heroku main
+heroku open
+```
 
-### Making a Progressive Web App
+Make sure to set your environment variable values
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Add a Postgres production database:
+```console
+heroku addons:create heroku-postgresql:hobby-dev
+heroku config
+```
 
-### Advanced Configuration
+Note: In your config.js file, make sure that you are connecting to the correct database when in production and make sure you connect to the correct port. 
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Connect to psql and you can run the sql files on Heroku:
+```console
+heroku pg:psql
+heroku pg:psql < jobly-schema.sql
+heroku pg:psql < jobly-seed.sql
+```
 
-### Deployment
+Note: if things break you can always check the server logs to see what's breaking:
+```console
+heroku logs --t
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## Authors
+- Winnie Chou
+- Kellen Rowe (pair programming partner)
