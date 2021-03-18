@@ -7,9 +7,10 @@ import CompanyDetail from "./CompanyDetail";
 import LoginForm from "./LoginForm";
 import ProfileForm from "./ProfileForm";
 import SignupForm from "./SignupForm";
+import PrivateRoute from "./routes-nav/PrivateRoute";
 
 /** Renders Routes component. 
- * 
+ *  TODO: TBU
  *  Parts of the site are only visible to logged-in users. 
  *  These routes are wrapped by <PrivateRoute>, which is an 
  *  authorization component.
@@ -37,48 +38,38 @@ function Routes({ user, signupUser, loginUser }) {
   const userJobs = user
     ? user.applications
     : null;
-
-  // TODO: Refactor
-  const showCompanies = user
-    ? <CompanyList />
-    : <Redirect to="/" />;
-
-  const showCompany = user
-    ? <CompanyDetail userJobs={userJobs} />
-    : <Redirect to="/" />;
-
-  const showJobs = user
-    ? <JobList userJobs={userJobs} />
-    : <Redirect to="/" />;
-
-  const showProfile = user
-    ? <ProfileForm user={user} />
-    : <Redirect to="/" />;
   
   return (
     <Switch>
+
       <Route exact path="/">
         <Homepage user={user}/>
       </Route>
-      <Route exact path="/companies">
-        {showCompanies}
-      </Route>
-      <Route exact path="/companies/:handle">
-        {showCompany}
-      </Route>
-      <Route exact path="/jobs">
-        {showJobs}
-      </Route>
+
       <Route exact path="/login">
         <LoginForm loginUser={loginUser} />
       </Route>
+
       <Route exact path="/signup">
         <SignupForm signupUser={signupUser} />
       </Route>
-      <Route exact path="/profile">
-        {showProfile}
-      </Route>
-      {/* 404 handler */}
+
+      <PrivateRoute exact path="/companies">
+        <CompanyList />
+      </PrivateRoute>
+
+      <PrivateRoute exact path="/jobs">
+        <JobList userJobs={userJobs} />
+      </PrivateRoute>
+
+      <PrivateRoute exact path="/companies/:handle">
+        <CompanyDetail userJobs={userJobs} />
+      </PrivateRoute>
+
+      <PrivateRoute exact path="/profile">
+        <ProfileForm user={user} />
+      </PrivateRoute>
+
       <Redirect to="/" />
     </Switch>
   );
