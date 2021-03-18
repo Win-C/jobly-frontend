@@ -8,31 +8,29 @@ import { BrowserRouter } from "react-router-dom";
 
 import Navigation from "./routes-nav/Navigation";
 import Routes from "./Routes";
-import Alert from "./Alert";
 import jwt from "jsonwebtoken";
 
 
 /** Renders Jobly App
  *  
+ *  TODO: TBU
  *  state:
  *  - user: user's account information from backend, an object like -
  *      { username, firstName, lastName, isAdmin, applications } 
  *    where applications is array of job ids like:
  *      [ id, etc. ]
  *  - token: JWT token for authorization
- *  - error: array of error messages to be shown to user
- *  - isLoading: Boolean value for loadingw/ default of true
  * 
- *  App -> { NavBar, Routes }
+ *  App -> { Navigation, Routes }
  */
 function App() {
+  const [infoLoaded, setInfoLoaded] = useState(false);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
 
   console.debug(
     "On App render:",
+    "infoLoaded =", infoLoaded,
     "user = ", user,
     "token = ", token,
   )
@@ -42,92 +40,77 @@ function App() {
    *   where applications is [ id, ... ]
    */
   useEffect(function fetchUserOnTokenChange() {
+    console.debug("App useEffect fetchUser", "token=", token);
+  
     async function fetchUser() {
       if (token) {
-        JoblyApi.token = token;
-        localStorage.setItem("token", token);
-        let { username } = jwt.decode(token);
         try {
-          const resp = await JoblyApi.getUser(username);
-          setUser(resp);
+          let { username } = jwt.decode(token);
+          // setting token in Api class to be used for Api calls
+          JoblyApi.token = token;
+          localStorage.setItem("token", token);
+          let currUser = await JoblyApi.getUser(username);
+          setUser(currUser);
         } catch (err) {
-          setError(err);
+          console.error("App fecthUser: problem loading", err);
+          setUser(null);
         }
       }
-      setIsLoading(false);
+      setInfoLoaded(true);
     }
+    // infoLoaded being used here while making async calls to Api when the 
+    // data is fetched or an error occurs, this will be set to false to control
+    // the spinner
+    setInfoLoaded(false);
     fetchUser();
-  }, [token, isLoading]);
+  }, [token]);
 
-  /** Sign up new user with current user inputs like
+  /** Sign up new user with data inputs like
    *  { username, password, firstName, lastName, email } 
    *  Returns JWT token for new user
    *  */
-  async function signupUser(currUser) {
+  async function signupUser(data) {
     try {
-      const resp = await JoblyApi.signupUser(currUser);
-      setToken(resp);
+      let token = await JoblyApi.signupUser(data);
+      setToken(token);
+      return { success: true };
     } catch (err) {
-      setError(err);
+      console.error("signup failed", err);
+      return { success: false, err };
     }
-    if (!error) setIsLoading(false);
   }
 
-  /** Login user with current user inputs { username, password }
+  /** Login user with data inputs { username, password }
    *  Returns JWT token for user
    * */
-  async function loginUser(currUser) {
+  async function loginUser(data) {
     try {
-      const resp = await JoblyApi.loginUser(currUser);
-      setToken(resp);
+      let token = await JoblyApi.loginUser(data);
+      setToken(token);
     } catch (err) {
-      setError(err);
+      console.error("login failed", err);
+      return { success: false, err };
     }
-    if (!error) setIsLoading(true);
   }
 
   /** Logout user by returning states to initial states */
   function logoutUser() {
     setUser(null);
     setToken(null);
-    setError(null);
     localStorage.setItem("token", null);
-    setIsLoading(true);
   }
 
-  /** Update user by using user's updates which is an object like
-   *  { firstName, lastName, password, email }
-   *  */
-  async function updateUserInfo(newInfo) {
-    try {
-      await JoblyApi.updateUser(newInfo);
-    } catch (err) {
-      setError(err);
-    }
-    if (!error) setIsLoading(true);
-  }
+  /** TODO: Add check if a job has been applied for */
+  // function hasAppliedToJob(){}
 
-  /** Adds job id to applications for user */
-  async function applyToJob(jobId) {
-    let { username } = jwt.decode(token);
-    try {
-      await JoblyApi.applyToJob(username, jobId);
-    } catch (err) {
-      setError(err);
-    }
-    if (!error) setIsLoading(true);
-  }
+  /** TODO: Adds job id to applications for user */
+  // function applyToJob(jobId) {}
 
-  if (isLoading) return <i>Loading...</i>;
-
-  // TODO: Flash error message and handle redirect
-  const showErrorMessage = error
-    ? <Alert error={error} />
-    : null;
+  // TODO: Add loading spinner
+  if (!infoLoaded) return <i>Loading...</i>;
 
   return (
     <div className="App">
-      {showErrorMessage}
       <BrowserRouter>
         <Navigation user={user}
           logoutUser={logoutUser}
@@ -136,8 +119,8 @@ function App() {
           user={user}
           signupUser={signupUser}
           loginUser={loginUser}
-          updateUser={updateUserInfo}
-          applyToJob={applyToJob}
+          // updateUser={updateUserInfo}
+          // applyToJob={applyToJob}
         />
       </BrowserRouter>
     </div>
