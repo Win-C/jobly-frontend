@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
 import Navigation from "./routes-nav/Navigation";
-import Routes from "./Routes";
+import Routes from "./routes-nav/Routes";
 import jwt from "jsonwebtoken";
 
 

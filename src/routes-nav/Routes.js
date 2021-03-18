@@ -1,13 +1,13 @@
 import { Switch, Redirect, Route } from "react-router-dom";
 
-import Homepage from "./Homepage";
-import CompanyList from "./CompanyList";
-import JobList from "./JobList";
-import CompanyDetail from "./CompanyDetail";
-import LoginForm from "./LoginForm";
-import ProfileForm from "./ProfileForm";
-import SignupForm from "./SignupForm";
-import PrivateRoute from "./routes-nav/PrivateRoute";
+import Homepage from "../Homepage";
+import CompanyList from "../CompanyList";
+import JobList from "../JobList";
+import CompanyDetail from "../CompanyDetail";
+import LoginForm from "../LoginForm";
+import ProfileForm from "../ProfileForm";
+import SignupForm from "../SignupForm";
+import PrivateRoute from "./PrivateRoute";
 
 /** Renders Routes component. 
  *  TODO: TBU
