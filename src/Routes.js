@@ -2,13 +2,19 @@ import { Switch, Redirect, Route } from "react-router-dom";
 
 import Homepage from "./Homepage";
 import CompanyList from "./CompanyList";
-import CompanyDetail from "./CompanyDetail";
 import JobList from "./JobList";
+import CompanyDetail from "./CompanyDetail";
 import LoginForm from "./LoginForm";
-import SignupForm from "./SignupForm";
 import ProfileForm from "./ProfileForm";
+import SignupForm from "./SignupForm";
 
 /** Renders Routes component. 
+ * 
+ *  Parts of the site are only visible to logged-in users. 
+ *  These routes are wrapped by <PrivateRoute>, which is an 
+ *  authorization component.
+ * 
+ *  Visiting non-existant route redirects to the homepage.
  * 
  *  Props: 
  *  - user: object with current user data
@@ -20,7 +26,12 @@ import ProfileForm from "./ProfileForm";
  *  App -> Routes -> { Homepage, CompanyList, CompanyDetail, JobList, 
  *                      LoginForm, SignupForm, ProfileForm }
 */
-function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
+function Routes({ user, signupUser, loginUser }) {
+  console.debug(
+    "Routes",
+    `login=${typeof login}`,
+    `register=${typeof register}`,
+  )
 
   // Create userJobs an array of job ids for applications submitted by the user
   const userJobs = user
@@ -33,15 +44,15 @@ function Routes({ user, signupUser, loginUser, updateUser, applyToJob }) {
     : <Redirect to="/" />;
 
   const showCompany = user
-    ? <CompanyDetail userJobs={userJobs} applyToJob={applyToJob} />
+    ? <CompanyDetail userJobs={userJobs} />
     : <Redirect to="/" />;
 
   const showJobs = user
-    ? <JobList userJobs={userJobs} applyToJob={applyToJob} />
+    ? <JobList userJobs={userJobs} />
     : <Redirect to="/" />;
 
   const showProfile = user
-    ? <ProfileForm updateUser={updateUser} user={user} />
+    ? <ProfileForm user={user} />
     : <Redirect to="/" />;
   
   return (
