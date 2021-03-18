@@ -10,7 +10,7 @@ Note: the following documentation focuses on the frontend. For backend related d
 
 **React Component Hierarchy**
 
-<img src="/static/images/jobly-react-component-hierarchy.png" width="600" height="500">
+<img src="/static/images/jobly-react-component-hierarchy.png" width="750" height="400">
 
 ## Current features
 - RESTful routing
