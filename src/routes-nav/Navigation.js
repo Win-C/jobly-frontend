@@ -60,8 +60,8 @@ function Navigation({ user, logoutUser }) {
   }
 
   return (
-    <nav className="Navigation navbar navbar-expand-md navbar-light bg-light">
-      <NavLink exact to="/" className="navbar-brand font-weight-bold">
+    <nav className="Navigation navbar navbar-expand-md">
+      <NavLink exact to="/" className="navbar-brand">
         Jobly
       </NavLink>
       {user ? loggedInNav() : loggedOutNav()}

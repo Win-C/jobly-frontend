@@ -1,11 +1,24 @@
 /* Navigation formatting */
 
 .Navigation {
-    background-color: lightgray;
+    background-color:#0d6efd;
     border-bottom: 2px solid silver;
+}
+
+.navbar-brand {
+    color: white;
+    font-weight: bold;
+}
+
+.nav-link {
+    color: white;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+    color: #ffc107;
 }
 
 .nav-link .active {
     font-weight: bold;
-    color: black;
+    color: #052c65;
 }
