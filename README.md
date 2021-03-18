@@ -34,10 +34,10 @@ TODO: TBU
 - Protected routes exist so a user needs to be logged in to access companies page, jobs page, and company details page
 
 ## Upcoming features
+- Collapsed and expandable navbar
 - Logged-in user can edit their profile
 - Logged-in user can apply for jobs (using the backend endpoint for this)
 - Testing with AJAX using React Testing Library
-- Nav Link formatting
 - Pagination
 - Live Search
 - Un-Apply to Jobs

@@ -1,0 +1,11 @@
+/* Navigation formatting */
+
+.Navigation {
+    background-color: lightgray;
+    border-bottom: 2px solid silver;
+}
+
+.nav-link .active {
+    font-weight: bold;
+    color: black;
+}

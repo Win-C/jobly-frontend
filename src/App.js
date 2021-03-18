@@ -6,11 +6,11 @@ import JoblyApi from "./api";
 import { useEffect, useState } from "react";
 import { BrowserRouter } from "react-router-dom";
 
-import NavBar from "./NavBar";
+import Navigation from "./routes-nav/Navigation";
 import Routes from "./Routes";
 import Alert from "./Alert";
-
 import jwt from "jsonwebtoken";
+
 
 /** Renders Jobly App
  *  
@@ -129,7 +129,7 @@ function App() {
     <div className="App">
       {showErrorMessage}
       <BrowserRouter>
-        <NavBar user={user}
+        <Navigation user={user}
           logoutUser={logoutUser}
         />
         <Routes
