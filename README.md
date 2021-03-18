@@ -1,51 +1,51 @@
-# Jobly
+# Jobly (frontend)
 
 Jobly is a full stack web application of a mock job board site where users can sign up and login. Logged in users gain access to a list of companies with search and filtering capabilities. Each company has a list of job postings that a user can view. A user may apply to a job posting, but each user is restricted from duplicate applications to a single job posting posted by a company.
 
 Check out the deployed frontend <a href="http://hilarious-cobweb.surge.sh">here</a>.
 
-Note: the following documentation focuses on the frontend. For backend related documentation and commentary, please go <a href="">here</a>.
+For **backend** related documentation and commentary, please go <a href="https://github.com/Win-C/jobly-backend">here</a>.
 
 ## Screenshots
+
+Below are screenshots of the deployed app:
+TODO: TBU
+
+<!-- <span>
+    <img src="/static/images/" width="350" height="350" border="1px" margin="10px">
+    <img src="/static/images/" width="350" height="350" border="1px" margin="10px">
+</span>
+<img src="/static/images/" width="750" height="400"> -->
 
 **React Component Hierarchy**
 
 <img src="/static/images/jobly-react-component-hierarchy.png" width="700" height="400">
 
 ## Current features
-- RESTful routing
-- Users can view list of companies with the option of filtering by company name and # of employees
-- Logged in admin users can create, update, and delete companies
-- Logged in admin users can also create users but registration is open to everyone
-- Logged in admin users can also get the list of all users
-- Getting information on a user, updating, or deleting a user is only permitted by either an admin, or by that user
-- Logged in users can view jobs with similar backend RESTful routing as companies
-- Optional filtering of job postings by title, salary and equity
-- Ability for users to submit job applications
+- Navigation routes:
+    - "/" - Homepage with a simple welcome message
+    - "/companies" - List of all companies with search filtering capabilities
+    - "/companies/apple" - View details of this company
+    - "/jobs" - List of all jobs
+    - "/login" - login/signup
+    - "/signup" - signup form
+    - "/profile" - edit profile page 
 
 ## Upcoming features
-- 
+- Testing with AJAX using React Testing Library
+- Nav Link formatting
+- Pagination
+- Live Search
+- Un-Apply to Jobs
+- Show a List of Companies Applied To
+- Add Edit Form for Companies
 
 ## Tech stack
 - PostgreSQL for database
-- Express / JavaScript for backend
-- Create-React-App/React for frontend
+- Express.js / Node.js for backend
+- React for frontend
 
 ## Dependencies
-**Backend dependencies** include:
-- bcrypt
-- body-parser
-- colors
-- cors
-- dotenv
-- express
-- jest
-- jsonschema
-- jsonwebtoken
-- morgan
-- pg
-
-Note: See package.json file for full list and associated package versions.
 
 **Frontend dependencies** include:
 - axios for requests
@@ -55,51 +55,38 @@ Note: See package.json file for full list and associated package versions.
 - react-router-dom for routing
 
 ## Installation
+
 **Frontend Development Setup**
 
-
-**Coverage Report**:
-
-
+Make sure you're in the correct folder. Then go ahead and install the dependencies and start the application:
+```console
+npm install
+npm start
+```
 
 ## Deployment
 
-Before deploying ensure that your package.json is up to date.
+We used surge.sh to deploy our frontend static website. Note: for backend deployment, please visit the backend repo. 
 
-We used Heroku to deploy our app so we created a Procfile in the root directory of our application. Make sure the filename does not have any extension and begins with capital P:
+Firstly, ensure you have the surge command installed. You can do this globally for ease of access anywhere in the Terminal:
+
 ```console
-echo "web: node server.js" > Procfile
+npm install --global surge
 ```
 
-Login to your heroku account and create an application, making sure you have a correct remote. Push your code to the new remote and make sure you have a worker:
-```console
-heroku login
-heroku create NAME_OF_APP
-git remote -v
-git push heroku main
-heroku open
+In your JoblyApi.js and anywhere else that you may make requests to localhost:3001, make sure you have the following:
+
+```javascript
+const BASE_URL = process.env.REACT_APP_BASE_URL || "http://localhost:3001";
 ```
 
-Make sure to set your environment variable values
+Make sure to define the environment variable for your frontend app.
+Then run the following commands in the Jobly frontend folder:
 
-Add a Postgres production database:
 ```console
-heroku addons:create heroku-postgresql:hobby-dev
-heroku config
-```
-
-Note: In your config.js file, make sure that you are connecting to the correct database when in production and make sure you connect to the correct port. 
-
-Connect to psql and you can run the sql files on Heroku:
-```console
-heroku pg:psql
-heroku pg:psql < jobly-schema.sql
-heroku pg:psql < jobly-seed.sql
-```
-
-Note: if things break you can always check the server logs to see what's breaking:
-```console
-heroku logs --t
+REACT_APP_BASE_URL=YOUR_HEROKU_BACKEND_URL npm run build
+cp build/index.html build/200.html
+surge build
 ```
 
 ## Authors
