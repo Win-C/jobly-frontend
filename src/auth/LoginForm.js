@@ -14,9 +14,20 @@ import { useHistory } from "react-router-dom";
  * */
 
 function LoginForm({ loginUser }) {
-  const initialState = {};
-  const [formData, setFormData] = useState(initialState);
+  const initialState = {
+    username: "",
+    password: "",
+  };
   const history = useHistory();
+  const [formData, setFormData] = useState(initialState);
+  const [formErrors, setFormErrors] = useState([]);
+
+  console.debug(
+    "LoginForm",
+    "login = ", typeof login,
+    "formData = ", formData,
+    "formErrors", formErrors,
+  )
 
   /** updates formData on change of input */
   function handleChange(evt) {
@@ -28,11 +39,14 @@ function LoginForm({ loginUser }) {
   }
 
   /** handles submission of form for user login */
-  function handleSubmit(evt) {
+  async function handleSubmit(evt) {
     evt.preventDefault();
-    loginUser(formData);
-    setFormData(initialState);
-    history.push("/companies");
+    let result = await loginUser(formData);
+    if (result.success) {
+      history.push("/companies");
+    } else {
+      setFormErrors(result.errors);
+    }
   }
 
   return (

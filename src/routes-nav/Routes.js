@@ -4,9 +4,9 @@ import Homepage from "../Homepage";
 import CompanyList from "../CompanyList";
 import JobList from "../JobList";
 import CompanyDetail from "../CompanyDetail";
-import LoginForm from "../LoginForm";
+import LoginForm from "../auth/LoginForm";
 import ProfileForm from "../ProfileForm";
-import SignupForm from "../SignupForm";
+import SignupForm from "../auth/SignupForm";
 import PrivateRoute from "./PrivateRoute";
 
 /** Renders Routes component. 
