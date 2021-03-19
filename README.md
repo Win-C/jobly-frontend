@@ -9,13 +9,9 @@ For **backend** related documentation and commentary, please go <a href="https:/
 ## Screenshots
 
 Below are screenshots of the deployed app:
-TODO: TBU
 
-<!-- <span>
-    <img src="/static/images/" width="350" height="350" border="1px" margin="10px">
-    <img src="/static/images/" width="350" height="350" border="1px" margin="10px">
-</span>
-<img src="/static/images/" width="750" height="400"> -->
+<img src="/static/images/jobly-homepage-screenshot" width="750" height="400">
+<img src="/static/images/jobly-jobs-screenshot" width="750" height="400">
 
 **React Component Hierarchy**
 
