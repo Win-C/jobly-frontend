@@ -10,8 +10,8 @@ For **backend** related documentation and commentary, please go <a href="https:/
 
 Below are screenshots of the deployed app:
 
-<img src="/static/images/jobly-homepage-screenshot" width="750" height="400">
-<img src="/static/images/jobly-jobs-screenshot" width="750" height="400">
+<img src="/static/images/jobly-homepage-screenshot.png" width="750" height="400">
+<img src="/static/images/jobly-jobs-screenshot.png" width="750" height="400">
 
 **React Component Hierarchy**
 
